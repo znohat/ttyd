@@ -20,6 +20,10 @@ To set it up:
 
 Replace `bash` with the command you want to share. Omit `--ably-notify` to disable desktop notifications.
 
+## Herdr integration
+
+This custom ttyd build is designed to work with the [Herdr Ably notification plugin](https://github.com/znohat/herdr-ttyd-ably), which publishes Herdr agent status events for ttyd to display as browser notifications.
+
 ## Acknowledgments
 
 This project builds on the original [ttyd](https://github.com/tsl0922/ttyd). Thank you to its authors and contributors for their work.
