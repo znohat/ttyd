@@ -6,6 +6,8 @@ This custom ttyd build is designed to work with the [Herdr Ably notification plu
 
 Desktop notifications are optional. When enabled, ttyd listens for `herdr.agent.done` messages on an Ably channel. Each message carries the agent status, such as `idle`, `done`, or `blocked`; ttyd shows it in a browser notification after the user grants permission.
 
+If notification permission has not already been granted, the browser permission prompt is requested on the first interaction with the page, such as a click, tap, or key press. Allow it to enable desktop notifications.
+
 To set it up:
 
 1. In the [Ably dashboard](https://ably.com), create or select an app, then create a dedicated API key in its API Keys tab.
