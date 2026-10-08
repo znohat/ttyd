@@ -66,6 +66,8 @@ struct server {
   char *prefs_json;        // client preferences
   char *credential;        // encoded basic auth credential
   char *auth_header;       // header name used for auth proxy
+  char *notification_key;     // Ably subscribe key for browser notifications
+  char *notification_channel; // Ably channel for browser notifications
   char *index;             // custom index.html
   char *command;           // full command line
   char **argv;             // command with arguments

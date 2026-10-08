@@ -1,4 +1,5 @@
 #include <libwebsockets.h>
+#include <json.h>
 #include <string.h>
 #include <zlib.h>
 
@@ -114,6 +115,35 @@ int callback_http(struct lws *wsi, enum lws_callback_reasons reason, void *user,
 
       p = buffer + LWS_PRE;
       end = p + sizeof(buffer) - LWS_PRE;
+
+      char notification_config_path[256];
+      snprintf(notification_config_path, sizeof(notification_config_path), "%snotification-config", endpoints.index);
+      if (strcmp(pss->path, notification_config_path) == 0) {
+        struct json_object *config = json_object_new_object();
+        json_object_object_add(config, "enabled", json_object_new_boolean(server->notification_key != NULL));
+        if (server->notification_key != NULL) {
+          json_object_object_add(config, "subscribeKey", json_object_new_string(server->notification_key));
+          json_object_object_add(config, "channel", json_object_new_string(server->notification_channel));
+        }
+        const char *body = json_object_to_json_string(config);
+        size_t body_len = strlen(body);
+        int response_error = lws_add_http_header_status(wsi, HTTP_STATUS_OK, &p, end) ||
+                             lws_add_http_header_by_token(wsi, WSI_TOKEN_HTTP_CONTENT_TYPE,
+                                                          (const unsigned char *)"application/json;charset=utf-8", 30,
+                                                          &p, end) ||
+                             lws_add_http_header_content_length(wsi, (unsigned long)body_len, &p, end) ||
+                             lws_finalize_http_header(wsi, &p, end) ||
+                             lws_write(wsi, buffer + LWS_PRE, p - (buffer + LWS_PRE), LWS_WRITE_HTTP_HEADERS) < 0;
+        if (response_error) {
+          json_object_put(config);
+          return 1;
+        }
+        pss->buffer = pss->ptr = strdup(body);
+        pss->len = body_len;
+        json_object_put(config);
+        lws_callback_on_writable(wsi);
+        break;
+      }
 
       char worker_path[256];
       snprintf(worker_path, sizeof(worker_path), "%snotifications-sw.js", endpoints.index);

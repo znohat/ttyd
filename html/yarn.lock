@@ -3698,15 +3698,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^18.0.6":
-  version: 18.0.6
-  resolution: "dotenv@npm:18.0.6"
-  bin:
-    dotenv: dist/index.cjs
-  checksum: 6d35ca4a1b7d8dba4f343687b8367029ce2008a5205a869b1caebcc5a5258cd2abe65d0b264aff54d242ce119602c1c6225127749ab456718d8319e52b1d5472
-  languageName: node
-  linkType: hard
-
 "duplexify@npm:^3.6.0":
   version: 3.7.1
   resolution: "duplexify@npm:3.7.1"
@@ -10812,7 +10803,6 @@ __metadata:
     css-loader: ^6.10.0
     css-minimizer-webpack-plugin: ^6.0.0
     decko: ^1.2.0
-    dotenv: ^18.0.6
     eslint: ^8.57.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^5.1.3

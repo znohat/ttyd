@@ -72,6 +72,7 @@ static const struct option options[] = {{"port", required_argument, NULL, 'p'},
                                         {"ssl-cert", required_argument, NULL, 'C'},
                                         {"ssl-key", required_argument, NULL, 'K'},
                                         {"ssl-ca", required_argument, NULL, 'A'},
+                                        {"ably-notify", required_argument, NULL, 'N'},
                                         {"url-arg", no_argument, NULL, 'a'},
                                         {"writable", no_argument, NULL, 'W'},
                                         {"terminal-type", required_argument, NULL, 'T'},
@@ -85,7 +86,7 @@ static const struct option options[] = {{"port", required_argument, NULL, 'p'},
                                         {"version", no_argument, NULL, 'v'},
                                         {"help", no_argument, NULL, 'h'},
                                         {NULL, 0, 0, 0}};
-static const char *opt_string = "p:i:U:c:H:u:g:s:w:I:b:P:f:6aSC:K:A:Wt:T:Om:oqBd:vh";
+static const char *opt_string = "p:i:U:c:H:u:g:s:w:I:b:P:f:6aSC:K:A:N:Wt:T:Om:oqBd:vh";
 
 static void print_help() {
   // clang-format off
@@ -114,6 +115,7 @@ static void print_help() {
           "    -q, --exit-no-conn      Exit on all clients disconnection\n"
           "    -B, --browser           Open terminal with the default system browser\n"
           "    -I, --index             Custom index.html path\n"
+          "    -N, --ably-notify        Ably subscribe key and channel (format: KEY@CHANNEL)\n"
           "    -b, --base-path         Expected base path for requests coming from a reverse proxy (eg: /mounted/here, max length: 128)\n"
 #if LWS_LIBRARY_VERSION_NUMBER >= 4000000
           "    -P, --ping-interval     Websocket ping interval(sec) (default: 5)\n"
@@ -208,6 +210,8 @@ static void server_free(struct server *ts) {
   if (ts == NULL) return;
   if (ts->credential != NULL) free(ts->credential);
   if (ts->auth_header != NULL) free(ts->auth_header);
+  if (ts->notification_key != NULL) free(ts->notification_key);
+  if (ts->notification_channel != NULL) free(ts->notification_channel);
   if (ts->index != NULL) free(ts->index);
   if (ts->cwd != NULL) free(ts->cwd);
   free(ts->command);
@@ -406,6 +410,20 @@ int main(int argc, char **argv) {
       case 'H':
         server->auth_header = strdup(optarg);
         break;
+      case 'N': {
+        char *separator = strchr(optarg, '@');
+        if (separator == NULL || separator == optarg || separator[1] == '\0') {
+          fprintf(stderr, "ttyd: invalid notification config, format: ABLY_SUBSCRIBE_KEY@ABLY_NOTIFICATION_CHANNEL\n");
+          return -1;
+        }
+        free(server->notification_key);
+        free(server->notification_channel);
+        size_t key_len = (size_t)(separator - optarg);
+        server->notification_key = xmalloc(key_len + 1);
+        memcpy(server->notification_key, optarg, key_len);
+        server->notification_key[key_len] = '\0';
+        server->notification_channel = strdup(separator + 1);
+      } break;
       case 'u':
         info.uid = parse_int("uid", optarg);
         break;

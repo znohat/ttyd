@@ -2,17 +2,31 @@ import { Realtime } from 'ably';
 import { Component } from 'preact';
 import { buildNotificationContent } from '../notification-content';
 
-const subscribeKey = process.env.ABLY_SUBSCRIBE_KEY;
-const channelName = process.env.ABLY_NOTIFICATION_CHANNEL || 'herdr-agent-completed';
-
 export class Notifications extends Component {
     private realtime?: Realtime;
     private notificationRegistration?: ServiceWorkerRegistration;
     private enableStarted = false;
+    private subscribeKey?: string;
+    private channelName?: string;
 
-    componentDidMount() {
-        document.addEventListener('pointerdown', this.enableOnInteraction, true);
-        document.addEventListener('keydown', this.enableOnInteraction, true);
+    async componentDidMount() {
+        try {
+            const response = await fetch('notification-config');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const config = (await response.json()) as {
+                enabled?: boolean;
+                subscribeKey?: string;
+                channel?: string;
+            };
+            if (!config.enabled || !config.subscribeKey || !config.channel) return;
+
+            this.subscribeKey = config.subscribeKey;
+            this.channelName = config.channel;
+            document.addEventListener('pointerdown', this.enableOnInteraction, true);
+            document.addEventListener('keydown', this.enableOnInteraction, true);
+        } catch (error) {
+            console.error('ttyd notifications: could not load notification configuration.', error);
+        }
     }
 
     componentWillUnmount() {
@@ -27,6 +41,12 @@ export class Notifications extends Component {
     private enable = async () => {
         if (this.enableStarted) return;
         this.enableStarted = true;
+        const subscribeKey = this.subscribeKey;
+        const channelName = this.channelName;
+        if (!subscribeKey || !channelName) {
+            this.enableStarted = false;
+            return;
+        }
 
         if (!('Notification' in window)) {
             this.enableStarted = false;
