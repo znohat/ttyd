@@ -115,7 +115,7 @@ static void print_help() {
           "    -q, --exit-no-conn      Exit on all clients disconnection\n"
           "    -B, --browser           Open terminal with the default system browser\n"
           "    -I, --index             Custom index.html path\n"
-          "    -N, --ably-notify        Ably subscribe key and channel (format: KEY@CHANNEL)\n"
+          "    -N, --ably-notify        Ably subscribe key and channel (format: ABLY_SUBSCRIBE_KEY@ABLY_NOTIFICATION_CHANNEL)\n"
           "    -b, --base-path         Expected base path for requests coming from a reverse proxy (eg: /mounted/here, max length: 128)\n"
 #if LWS_LIBRARY_VERSION_NUMBER >= 4000000
           "    -P, --ping-interval     Websocket ping interval(sec) (default: 5)\n"
