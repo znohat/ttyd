@@ -16,6 +16,10 @@ To set it up:
    ttyd --ably-notify 'YOUR_ABLY_API_KEY@YOUR_NOTIFICATION_CHANNEL' herdr
    ```
 
+Use `YOUR_NOTIFICATION_CHANNEL` for both the Herdr plugin and ttyd. You don't
+need to create the channel in advance; Ably creates it on demand when ttyd
+subscribes.
+
 ## Theming
 
 ```
