@@ -6,7 +6,7 @@ ttyd -t 'theme={"background":"#faf4ed","foreground":"#575279","cursor":"#575279"
 
 ## Desktop Notification
 
-Desktop notifications are optional. When enabled, ttyd listens for Herdr `herdr.agent.done` events on an Ably channel and shows the agent status in a browser notification after the user grants permission.
+Desktop notifications are optional. When enabled, ttyd listens for `herdr.agent.done` messages on an Ably channel. Each message carries the agent status, such as `idle`, `done`, or `blocked`; ttyd shows it in a browser notification after the user grants permission.
 
 To set it up:
 
