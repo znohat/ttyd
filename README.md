@@ -2,6 +2,8 @@
 
 This custom ttyd build is designed to work with the [Herdr Ably notification plugin](https://github.com/znohat/herdr-ttyd-ably), which publishes Herdr agent status events for ttyd to display as browser notifications.
 
+![herdr-ttyd-ably-preview](https://raw.githubusercontent.com/znohat/ttyd/main/herdr-ttyd-ably-preview.gif)
+
 ## Desktop Notification
 
 Desktop notifications are optional. When enabled, ttyd listens for `herdr.agent.done` messages on an Ably channel. Each message carries the agent status, such as `idle`, `done`, or `blocked`; ttyd shows it in a browser notification after the user grants permission.
