@@ -17,7 +17,7 @@ To set it up:
 3. Start ttyd with the key and the same channel your Herdr event publisher uses:
 
    ```sh
-   ttyd --ably-notify 'YOUR_ABLY_API_KEY@YOUR_NOTIFICATION_CHANNEL' herdr
+   ttyd --ably-notify 'ABLY_SUBSCRIBE_ONLY_KEY@YOUR_NOTIFICATION_CHANNEL' herdr
    ```
 
 Use `YOUR_NOTIFICATION_CHANNEL` for both the Herdr plugin and ttyd. You don't
