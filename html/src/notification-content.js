@@ -1,9 +1,11 @@
 'use strict';
 
-function buildNotificationContent(status, agent) {
+function buildNotificationContent(status, agent, hostname, workspaceName, paneName) {
     const name = typeof agent === 'string' && agent.trim() ? agent.trim() : 'Herdr';
     const baseName = name.replace(/\s+Agent$/i, '');
-    const title = `${baseName.charAt(0).toUpperCase()}${baseName.slice(1)} Agent`;
+    const agentTitle = `${baseName.charAt(0).toUpperCase()}${baseName.slice(1)} Agent`;
+    const host = typeof hostname === 'string' && hostname.trim() ? hostname.trim() : 'localhost';
+    const title = `[${host}] ${agentTitle}`;
     const normalizedAgent = typeof agent === 'string' ? agent.toLowerCase().trim() : '';
     const agentWords = normalizedAgent.split(/[^a-z0-9]+/);
     const iconByAgent = {
@@ -36,20 +38,10 @@ function buildNotificationContent(status, agent) {
 
     const content = icon ? { title, icon } : { title };
 
-    if (status === 'idle') {
-        return { ...content, body: 'Agent is waiting for your input' };
-    }
-    if (status === 'done') {
-        return { ...content, body: 'Agent has finished the work' };
-    }
-    if (status === 'blocked') {
-        return { ...content, body: 'Agent is waiting for your approval or input' };
-    }
-    if (typeof status === 'string' && status.trim()) {
-        const displayStatus = status.trim().replace(/[_-]+/g, ' ');
-        return { ...content, body: `Agent status changed to ${displayStatus}` };
-    }
-    return null;
+    if (typeof status !== 'string' || !status.trim()) return null;
+    const workspace = typeof workspaceName === 'string' && workspaceName.trim() ? workspaceName.trim() : 'workspace';
+    const pane = typeof paneName === 'string' && paneName.trim() ? paneName.trim() : 'pane';
+    return { ...content, body: `Agent is ${status.trim()} on ${workspace} - ${pane}` };
 }
 
 module.exports = { buildNotificationContent };

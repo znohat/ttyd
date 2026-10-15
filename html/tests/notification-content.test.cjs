@@ -3,26 +3,26 @@ const test = require('node:test');
 
 const { buildNotificationContent } = require('../src/notification-content');
 
-test('waiting input notification names the agent and explains why it is waiting', () => {
-    assert.deepEqual(buildNotificationContent('idle', 'codex'), {
-        title: 'Codex Agent',
-        body: 'Agent is waiting for your input',
+test('idle notification includes hostname, workspace, and pane', () => {
+    assert.deepEqual(buildNotificationContent('idle', 'codex', 'devbox', 'api', 'server'), {
+        title: '[devbox] Codex Agent',
+        body: 'Agent is idle on api - server',
         icon: 'notifications/codex.png',
     });
 });
 
 test('finished notification names the agent and says the work is complete', () => {
-    assert.deepEqual(buildNotificationContent('done', 'Codex'), {
-        title: 'Codex Agent',
-        body: 'Agent has finished the work',
+    assert.deepEqual(buildNotificationContent('done', 'Codex', 'devbox', 'api', 'server'), {
+        title: '[devbox] Codex Agent',
+        body: 'Agent is done on api - server',
         icon: 'notifications/codex.png',
     });
 });
 
 test('uses the event agent name in the title', () => {
-    assert.deepEqual(buildNotificationContent('done', 'claude'), {
-        title: 'Claude Agent',
-        body: 'Agent has finished the work',
+    assert.deepEqual(buildNotificationContent('done', 'claude', 'devbox', 'api', 'server'), {
+        title: '[devbox] Claude Agent',
+        body: 'Agent is done on api - server',
         icon: 'notifications/claude.png',
     });
 });
@@ -80,24 +80,24 @@ test('matches Herdr agent kind aliases and display labels', () => {
     }
 });
 
-test('blocked notification explains that the agent needs input', () => {
-    assert.deepEqual(buildNotificationContent('blocked', 'Codex'), {
-        title: 'Codex Agent',
-        body: 'Agent is waiting for your approval or input',
+test('blocked notification includes workspace and pane', () => {
+    assert.deepEqual(buildNotificationContent('blocked', 'Codex', 'devbox', 'api', 'server'), {
+        title: '[devbox] Codex Agent',
+        body: 'Agent is blocked on api - server',
         icon: 'notifications/codex.png',
     });
 });
 
 test('uses a generic agent label when Herdr does not provide an agent name', () => {
-    assert.deepEqual(buildNotificationContent('done', null), {
-        title: 'Herdr Agent',
-        body: 'Agent has finished the work',
+    assert.deepEqual(buildNotificationContent('done', null, 'devbox', 'api', 'server'), {
+        title: '[devbox] Herdr Agent',
+        body: 'Agent is done on api - server',
     });
 });
 
 test('describes future status values and uses the browser default icon when no logo matches', () => {
-    assert.deepEqual(buildNotificationContent('review', 'droid'), {
-        title: 'Droid Agent',
-        body: 'Agent status changed to review',
+    assert.deepEqual(buildNotificationContent('review', 'droid', 'devbox', 'api', 'server'), {
+        title: '[devbox] Droid Agent',
+        body: 'Agent is review on api - server',
     });
 });
