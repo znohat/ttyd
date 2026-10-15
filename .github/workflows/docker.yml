@@ -20,9 +20,8 @@ jobs:
       - name: Cross build multi-arch binary
         run: |
           mkdir dist
-          for arch in amd64 armv7 arm64 s390x; do
+          for arch in amd64 arm64; do
             env BUILD_TARGET=$arch ./scripts/cross-build.sh
-            [ "$arch" = "armv7" ] && arch="arm" 
             mkdir -p dist/$arch && cp build/ttyd dist/$arch/ttyd
           done
       - uses: docker/setup-qemu-action@v4
@@ -54,7 +53,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/s390x
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ env.DOCKER_TAG }}
@@ -64,7 +63,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.alpine
-          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/s390x
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ env.ALPINE_TAG }}
