@@ -84,10 +84,19 @@ export class Notifications extends Component {
                 const data = message.data as {
                     status?: string;
                     agent?: string | null;
+                    hostname?: string | null;
+                    workspace_name?: string | null;
+                    pane_name?: string | null;
                 };
                 if (typeof data.status !== 'string' || !data.status.trim()) return;
 
-                const content = buildNotificationContent(data.status, data.agent);
+                const content = buildNotificationContent(
+                    data.status,
+                    data.agent,
+                    data.hostname || window.location.hostname,
+                    data.workspace_name,
+                    data.pane_name
+                );
                 if (!content) return;
                 const { title, body } = content;
                 const options: NotificationOptions = {
@@ -95,6 +104,7 @@ export class Notifications extends Component {
                     data: { url: window.location.href },
                 };
                 if (content.icon) options.icon = new URL(content.icon, window.location.href).href;
+                console.log('ttyd notifications: desktop notification message.', { title, body });
                 try {
                     if (this.notificationRegistration) {
                         await this.notificationRegistration.showNotification(title, options);
@@ -105,7 +115,6 @@ export class Notifications extends Component {
                         notification.onerror = () =>
                             console.error('ttyd notifications: the browser could not display the notification.');
                     }
-                    console.debug(`ttyd notifications: requested “${title}” notification.`);
                 } catch (error) {
                     console.error('ttyd notifications: could not show desktop notification.', error);
                 }
