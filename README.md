@@ -27,7 +27,11 @@ subscribes.
 ## Theming
 
 ```
+## Rosé Pine Dawn
 ttyd -t 'theme={"background":"#faf4ed","foreground":"#575279","cursor":"#575279","cursorAccent":"#faf4ed","selectionBackground":"#dfdad9","black":"#f2e9e1","red":"#b4637a","green":"#286983","yellow":"#ea9d34","blue":"#56949f","magenta":"#907aa9","cyan":"#d7827e","white":"#575279","brightBlack":"#9893a5","brightRed":"#b4637a","brightGreen":"#286983","brightYellow":"#ea9d34","brightBlue":"#56949f","brightMagenta":"#907aa9","brightCyan":"#d7827e","brightWhite":"#575279"}' -t fontFamily='SF Mono Terminal, JetBrains Mono, monospace' -t fontSize=15 herdr
+
+## Catppuccin Latte
+ttyd -t 'theme={"background":"#eff1f5","foreground":"#4c4f69","cursor":"#dc8a78","cursorAccent":"#eff1f5","selectionBackground":"#acb0be","black":"#5c5f77","red":"#d20f39","green":"#40a02b","yellow":"#df8e1d","blue":"#1e66f5","magenta":"#ea76cb","cyan":"#179299","white":"#acb0be","brightBlack":"#6c6f85","brightRed":"#d20f39","brightGreen":"#40a02b","brightYellow":"#df8e1d","brightBlue":"#1e66f5","brightMagenta":"#ea76cb","brightCyan":"#179299","brightWhite":"#bcc0cc"}' -t fontFamily='SF Mono Terminal, JetBrains Mono, monospace' -t fontSize=15 herdr
 ```
 
 ## Acknowledgments
